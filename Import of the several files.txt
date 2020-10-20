@@ -1,0 +1,51 @@
+'' Excel VBA Course 2 Week 3
+'' Exercise to acquire data from multiple csv files
+
+Option Explicit
+
+Sub RalphieReactor()
+
+    Dim FileNames As Variant
+    Dim tWB, aWB As Workbook     '' aWB - active workbook; tWB - this workbook
+    Dim i As Integer
+    Dim rng As Range
+    Dim adrString As String
+
+    Range("A1:A50").NumberFormat = "0.00%"
+    Range("A1:A50").NumberFormat = "hh:mm"
+
+    Set tWB = ThisWorkbook
+    
+    '' acquiring the list of filenames
+    FileNames = Application.GetOpenFilename(FileFilter:="Excel Files (*.csv),*.csv", _
+                          Title:="Please select an Excel file", MultiSelect:=True)
+                          
+    '' opening the first file to define the range of data
+    Workbooks.Open FileNames(1)
+    Set rng = Application.InputBox("Select a range", "Obtain Range Object", Type:=8)
+    adrString = rng.Address
+    
+    '' reducing the computer workload by disabling openig of the window
+    Application.ScreenUpdating = False
+    
+    '' Iteration through files and copying the data in main worbook
+    For i = 1 To UBound(FileNames)
+        Workbooks.Open FileNames(i)
+        Set aWB = ActiveWorkbook
+        tWB.Sheets("Data").Range("A" & i & ":D" & i) = WorksheetFunction.Transpose(aWB.Sheets(1).Range(adrString)) ''Range("B3:B6")
+        aWB.Close SaveChanges:=False
+    Next i
+
+    tWB.Activate
+    
+End Sub
+
+Sub Reset()
+    '' function to clean cells in the workbook
+    Cells.Clear
+
+End Sub
+
+
+
+
