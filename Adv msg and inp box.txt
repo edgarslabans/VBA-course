@@ -1,0 +1,15 @@
+Option Explicit
+Sub test()
+
+
+'' Advanced input box
+Dim x As Integer
+x = InputBox("Please enter the value", "myValue", 7)    '' last number: input type validation
+
+'' Advanced message box
+
+Dim Ans As Integer
+Ans = MsgBox("Insert data!", vbYesNoCancel, "Outp") '' instead the vbYesNoCancel button code can be applied
+
+End Sub
+
