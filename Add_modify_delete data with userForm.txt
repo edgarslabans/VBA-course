@@ -1,0 +1,105 @@
+'' Basic functionality of the database interface
+
+
+Option Explicit
+
+'' Open The Form and populate drop-down list
+Sub RunForm()
+PopulateComboBox
+NameForm.Show
+End Sub
+
+
+'' populate drop-down list
+Sub PopulateComboBox()
+
+Dim i As Integer, j As Integer
+
+'' Acquiring data from column A
+For i = 1 To FirstEmptyRow
+    NameForm.ComboBox1.AddItem Range("A" & i)
+Next i
+'' setting the first entry as placeholder
+NameForm.ComboBox1.Text = Range("A1")
+
+End Sub
+
+'' add new entry
+Sub AddName()
+Dim nRows As Integer, i As Integer, pn As String
+'Input validation
+If NameForm.NewName = "" Then
+    MsgBox "Name field cannot be left blank!"
+    Exit Sub
+End If
+
+Dim tNum As String
+tNum = InputBox("Please enter tel number")
+
+Dim emptyRow As Integer
+emptyRow = FirstEmptyRow
+
+Cells(emptyRow, 1) = NameForm.NewName.Text
+Cells(emptyRow, 2) = tNum
+
+End Sub
+
+
+'' delete entry
+Sub DeleteItem()
+Dim Index As Integer, Ans As Integer
+Ans = MsgBox("Are you sure you want to delete this record?!", 20)
+If Ans = 6 Then
+
+    Rows(FindName(NameForm.ComboBox1.Text)).EntireRow.Delete
+    Rows(FirstEmptyRow).Insert shift:=xlShiftDown
+    
+    
+End If
+Range("A1").Select
+NameForm.ComboBox1.Value = Range("A1")
+End Sub
+
+'' update entry
+Sub UpdateNumber()
+    Dim Ans As String, Index As Integer
+    Ans = InputBox("What is " & NameForm.ComboBox1.Value & "'s new phone number?")
+    If Ans <> "" Then 'Protects against empty input OR cancel button
+
+    Cells(FindName(NameForm.ComboBox1.Text), 2).Value = Ans
+    
+End If
+End Sub
+
+
+'' find the first empty row
+Function FirstEmptyRow() As Integer
+
+Dim i As Integer
+For i = 1 To 100
+    If IsEmpty(Cells(i, 1).Value) = True Then
+    FirstEmptyRow = i
+    Exit Function
+    End If
+Next i
+
+End Function
+
+'' find the row on index of the line
+Function FindName(name As String) As Integer
+
+Dim i As Integer
+For i = 1 To 100
+    If Cells(i, 1).Value = name Then
+    FindName = i
+    Exit Function
+    End If
+Next i
+
+End Function
+
+
+
+
+
+
