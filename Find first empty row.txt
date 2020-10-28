@@ -1,0 +1,11 @@
+Function FirstEmptyRow() As Integer
+
+Dim i As Integer
+For i = 1 To 10
+    If IsEmpty(Cells(i, 1).Value) = True Then
+    FirstEmptyRow = i
+    Exit Function
+    End If
+Next i
+
+End Function
