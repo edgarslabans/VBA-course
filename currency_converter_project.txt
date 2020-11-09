@@ -1,15 +1,18 @@
-''
-
+''VBA Course Part3
 
 Option Explicit
 
 '' Open The Form and populate drop-down list
 Sub RunForm()
 PopulateComboBox
+UserForm1.TextBox3.Value = Date
 UserForm1.Show
+
 End Sub
 
-
+Sub ExitUserF()
+    UserForm1.Hide
+End Sub
 
 '' populate drop-down list
 Sub PopulateComboBox()
@@ -95,11 +98,11 @@ UserForm1.TextBox2.Value = inp * ratio * ratio2
 End Sub
 
 
-Sub QueryStarter()
+Sub QueryStarter(n As Integer)  '', myDate As String
     '' update querry routine from stackoverflow
     Dim url As String
     url = "URL;https://www.xe.com/currencytables/?from=USD&date=2020-11-04"
-    With Worksheets("Sheet2").QueryTables.Add(Connection:=url, Destination:=Worksheets("Sheet2").Range("A1"))
+    With Worksheets("Sheet2").QueryTables.Add(Connection:=url, Destination:=Worksheets("Sheet2").Range("A" & (1 + 5 * n)))
         .Name = "My Query"
         .RowNumbers = False
         .FillAdjacentFormulas = False
@@ -122,14 +125,22 @@ Sub QueryStarter()
     End With
     
     '' cleaning the imported data
-    Worksheets("Sheet2").Range("A1:A13").EntireRow.Delete
-    Worksheets("Sheet2").Range("A169:D199").EntireRow.Delete
 
 
 End Sub
 
 
+Sub SeveralQuerries()
 
+    Dim i As Integer
+    For i = 1 To 2
+        QueryStarter (i)
+    Next i
+    
+    Worksheets("Sheet2").Range("A1:A13").EntireRow.Delete
+    Worksheets("Sheet2").Range("A169:D199").EntireRow.Delete
+
+End Sub
 
 
 
